@@ -41,39 +41,62 @@ public class CountrySimDriver {
 		return name;
 	}
 
-	public static void printCountries(final ArrayList<Country> countries) {
-		for (final Country country : countries) {
-			System.out.println(country);
-		}
-	}
-
 	public static void main(final String... args) { // using variable arguments because fancy
-
-		final ArrayList<Country> countries = new ArrayList<Country>(); // stores all countries
+		
 		int countryAmount = 0;
-
+		String response;
+		
+		Person.createNameLists();  // grabbing all the names from the txt files and putting them in Person's static name lists
+		
 		System.out.println("Welcome to CountrySim\n---------------------");
 
 		System.out.println("How many countries to generate?");
 		countryAmount = Integer.parseInt(scan.nextLine());
 		for (int i = 0; i < countryAmount; i++) {
-			new Country(createName(), countries);
+			new Country(createName());
 		}
 
-		printCountries(countries);
+		Country.printCountries(true);
 
 		while (true) {
-			System.out.println("\nWould you like to hold an election? (y or n)");
-			final String response = scan.nextLine();
+			System.out.println("\nHold an election? (y or n)");
+			response = scan.nextLine();
 			if (response.equalsIgnoreCase("y")) {
 				System.out.println("Enter number of candidates in election (no more than 7): ");
-				final int candidateAmount = Integer.parseInt(scan.nextLine());
-				countries.get(0).election(candidateAmount);
+				int candidateAmount = Integer.parseInt(scan.nextLine());
+				Country.getCountry(0).election(candidateAmount);
 			} else {
 				break;
 			}
 		}
-
+		
+		System.out.println("\nStart an alliance? (y or n)");
+		response = scan.nextLine();
+		if (response.equalsIgnoreCase("y")) {
+			System.out.println("\nName the alliance: ");
+			String allianceName = scan.nextLine();
+			System.out.println("\nChoose countries to offer alliance (enter one name at a time; when finished, type 'done')\n");
+			Country.printCountries(true);
+			Alliance alliance  = new Alliance(allianceName);
+			while(true) {
+				response = scan.nextLine();
+				if(response.equalsIgnoreCase("done")) {
+					break;
+				}
+				for(Country country : Country.COUNTRIES) {
+					if(response.equalsIgnoreCase(country.getName())) {
+						boolean acceptOffer = rand.nextBoolean();
+						if(acceptOffer) {
+							System.out.println(country.getName() + " accepts");
+							alliance.addCountry(country);
+						} else {
+							System.out.println(country.getName() + " refuses");
+						}
+					}
+				}
+			}
+			System.out.println("\n" + alliance);
+		}
 		/* country.assassinateLeader() - percent chance to kill
 		 * reputation
 		 * discordLevel = disagreeance in country gov style with leader

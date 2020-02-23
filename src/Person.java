@@ -3,14 +3,13 @@ import java.lang.Math;
 import java.util.*;
 
 public class Person {
-	public static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";
-	public static final String LAST_NAMES_FILE_PATH = "src/last_names.txt";
-
+	private static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";
+	private static final String LAST_NAMES_FILE_PATH = "src/last_names.txt";
+	private static ArrayList<String> firstNameList;
+	private static ArrayList<String> lastNameList;
+	
 	private Random rand = new Random();
 	
-	static private ArrayList<String> firstNameList;
-	static private ArrayList<String> lastNameList;
-	static private boolean hasRun = false;
 	private String firstName;
 	private String lastName;
 	private int authorityAmount;  // high = total gov control; low = no gov control
@@ -20,7 +19,6 @@ public class Person {
 		createName();
 		authorityAmount = rand.nextInt(100);
 		authorityConsolidation = rand.nextInt(100);
-		hasRun = true;
 	}
 
 	private String plotPoint(int xVal) {
@@ -122,14 +120,11 @@ public class Person {
 	}
 	
 	private void createName() {
-		if(!hasRun) {
-			createNameLists();
-		}
 		firstName = firstNameList.get(rand.nextInt(firstNameList.size() - 1));
 		lastName = lastNameList.get(rand.nextInt(lastNameList.size() - 1));
 	}
 	
-	private void createNameLists() {
+	public static void createNameLists() {
 		// fill firstNameList
 		firstNameList = new ArrayList<String>();
 		lastNameList = new ArrayList<String>();
