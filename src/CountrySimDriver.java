@@ -62,9 +62,7 @@ public class CountrySimDriver {
 			System.out.println("\nHold an election? (y or n)");
 			response = scan.nextLine();
 			if (response.equalsIgnoreCase("y")) {
-				System.out.println("Enter number of candidates in election (no more than 7): ");
-				int candidateAmount = Integer.parseInt(scan.nextLine());
-				Country.getCountry(0).election(candidateAmount);
+				Country.getCountry(0).election();
 			} else {
 				break;
 			}

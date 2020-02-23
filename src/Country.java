@@ -2,57 +2,55 @@ import java.util.*;
 
 public class Country {
 
-	private static final ArrayList<Country> COUNTRIES = new ArrayList<Country>(); // stores all countries
 	public static final int VOTE_COUNT_RANGE = 100;
-
+	public static final Random RANDOM = new Random();
+	private static final ArrayList<Country> COUNTRIES = new ArrayList<Country>(); // stores all countries
+	private static final Government[] VALUES = Government.values();
+	private static final int SIZE = VALUES.length;
+	private static final Scanner SCANNER = new Scanner(System.in);
+	
 	private String name;
-	private String gov;
 	private String style;
 	private Person leader;
-	private String[] govList = {"Anarchy","Aristocracy","Bureaucracy","Capitalist","Colonialist","Communist","Democracy","Federalist","Feudalist","Kleptocracy","Meritocracy","Dictatorship","Monarchy","Oligarchy","Plutocracy","Republic","Socialist","Theocracy","Totalitarian","Tribalist"};
+	private Government gov;
 	private Person[] candidates;
-
-	public static Random rand = new Random();
 
 	public Country(String name) {
 		this.name = name;
 		leader = new Person();
-		gov = govList[rand.nextInt(govList.length - 1)];
+	    gov = VALUES[(RANDOM.nextInt(SIZE))];
 		COUNTRIES.add(this);
 	}
 
 	public static void printCountries(boolean abridge) {
 		if(abridge) {
-			for (final Country country : COUNTRIES) {
+			for (final Country country : Country.COUNTRIES) {
 				System.out.println(country.toString(true));
 			}
 		} else {
-			for (Country country : COUNTRIES) {
+			for (Country country : Country.COUNTRIES) {
 				System.out.println(country);
 			}
 		}
 	}
 
 	public static Country getCountry(int index) {
-		return COUNTRIES.get(index);
+		return Country.COUNTRIES.get(index);
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getName() {
 		return name;
 	}
 
-
-	public void setGov(String gov) {
+	public void setGov(Government gov) {
 		this.gov = gov;
 	}
 
-
-	public String getGov() {
+	public Government getGov() {
 		return gov;
 	}
 
@@ -61,11 +59,9 @@ public class Country {
 		this.style = style;
 	}
 
-
 	public String getStyle() {
 		return style;
 	}
-
 
 	public String getLeader() {
 		return leader.getName();
@@ -76,15 +72,20 @@ public class Country {
 		return temp;
 	}
 	
-	public void election(int candidateAmount) {
-		candidates = new Person[candidateAmount];
-		Person winner;
-		for(int i = 0; i < candidates.length; i++) {
-			candidates[i] = new Person();
+	public void election() {
+		if(gov.getElectionsAllowed()) {
+			System.out.println("Enter number of candidates in election (no more than 7): ");
+			int candidateAmount = Integer.parseInt(SCANNER.nextLine());
+			candidates = new Person[candidateAmount];
+			Person winner;
+			for(int i = 0; i < candidates.length; i++) {
+				candidates[i] = new Person();
+			}
+			winner = getElectionResults(candidates);
+			System.out.println("Elected: " + winner + "\n");
+		} else {
+			System.out.println("The " + gov + " government-style does not permit elections.");
 		}
-		winner = getElectionResults(candidates);
-		//printCandidates();
-		System.out.println("Elected: " + winner + "\n");
 	}
 
 	private String translateVotePoints(int total) {
@@ -105,7 +106,7 @@ public class Country {
 		int totalVotes = 0;
 
 		for(int i = 0; i < candidates.length; i++) {
-			votes[i] = rand.nextInt(VOTE_COUNT_RANGE);
+			votes[i] = RANDOM.nextInt(VOTE_COUNT_RANGE);
 			totalVotes += votes[i];
 		}
 		int maxVotes = votes[0];
