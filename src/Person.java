@@ -3,12 +3,11 @@ import java.lang.Math;
 import java.util.*;
 
 public class Person {
-	private static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";
-	private static final String LAST_NAMES_FILE_PATH = "src/last_names.txt";
+	private static final String FIRST_NAMES_FILE_PATH = "first_names.txt";
+	private static final String LAST_NAMES_FILE_PATH = "last_names.txt";
+	private static final Random RANDOM = new Random();
 	private static ArrayList<String> firstNameList;
 	private static ArrayList<String> lastNameList;
-	
-	private Random rand = new Random();
 	
 	private String firstName;
 	private String lastName;
@@ -17,8 +16,8 @@ public class Person {
 
 	public Person() {
 		createName();
-		authorityAmount = rand.nextInt(100);
-		authorityConsolidation = rand.nextInt(100);
+		authorityAmount = RANDOM.nextInt(100);
+		authorityConsolidation = RANDOM.nextInt(100);
 	}
 
 	private String plotPoint(int xVal) {
@@ -120,8 +119,8 @@ public class Person {
 	}
 	
 	private void createName() {
-		firstName = firstNameList.get(rand.nextInt(firstNameList.size() - 1));
-		lastName = lastNameList.get(rand.nextInt(lastNameList.size() - 1));
+		firstName = firstNameList.get(RANDOM.nextInt(firstNameList.size() - 1));
+		lastName = lastNameList.get(RANDOM.nextInt(lastNameList.size() - 1));
 	}
 	
 	public static void createNameLists() {
