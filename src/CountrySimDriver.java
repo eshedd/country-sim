@@ -79,13 +79,15 @@ public class CountrySimDriver {
 			Country.printCountries(true);
 			Alliance alliance  = new Alliance(allianceName);
 			while(true) {
+				boolean isMatch = false;
 				response = scan.nextLine();
 				if(response.equalsIgnoreCase("done")) {
 					break;
 				}
-				for(Country country : Country.COUNTRIES) {
+				for(Country country : Country.getCountries()) {
 					if(response.equalsIgnoreCase(country.getName())) {
 						boolean acceptOffer = rand.nextBoolean();
+						isMatch = true;
 						if(acceptOffer) {
 							System.out.println(country.getName() + " accepts");
 							alliance.addCountry(country);
@@ -93,6 +95,9 @@ public class CountrySimDriver {
 							System.out.println(country.getName() + " refuses");
 						}
 					}
+				}
+				if(!isMatch) {
+					System.out.println("Invalid");
 				}
 			}
 			System.out.println("\n" + alliance);

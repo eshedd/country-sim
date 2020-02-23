@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Country {
 
-	public static final ArrayList<Country> COUNTRIES = new ArrayList<Country>(); // stores all countries
+	private static final ArrayList<Country> COUNTRIES = new ArrayList<Country>(); // stores all countries
 	public static final int VOTE_COUNT_RANGE = 100;
 
 	private String name;
@@ -70,7 +70,12 @@ public class Country {
 	public String getLeader() {
 		return leader.getName();
 	}
-
+	
+	public static ArrayList<Country> getCountries() {
+		ArrayList<Country> temp = new ArrayList<Country>(COUNTRIES);
+		return temp;
+	}
+	
 	public void election(int candidateAmount) {
 		candidates = new Person[candidateAmount];
 		Person winner;
