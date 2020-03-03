@@ -3,8 +3,8 @@ import java.lang.Math;
 import java.util.*;
 
 public class Person {
-	private static final String FIRST_NAMES_FILE_PATH = "first_names.txt";
-	private static final String LAST_NAMES_FILE_PATH = "last_names.txt";
+	private static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";  //change to only "first_names.txt" if runnning in terminal"
+	private static final String LAST_NAMES_FILE_PATH = "src/last_names.txt";  // same as above
 	private static final Random RANDOM = new Random();
 	private static ArrayList<String> firstNameList;
 	private static ArrayList<String> lastNameList;
@@ -206,8 +206,19 @@ public class Person {
 		return authorityConsolidation;
 	}
 	
+	@Override
 	public String toString() {
 		return firstName + " " + lastName + "\n\t Authority Support: " + authorityAmount + "/100\n\t Democracy Support: " + authorityConsolidation + "/100\n\n" + getSpectrum();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Person) {
+			Person tempPerson = (Person) obj;
+			return getName().equalsIgnoreCase(tempPerson.getName());
+		} else {
+			return false;
+		}
 	}
 
 }

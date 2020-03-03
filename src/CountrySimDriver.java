@@ -40,6 +40,19 @@ public class CountrySimDriver {
 
 		return name;
 	}
+	
+	public static boolean makeAlliance() {
+		System.out.println("\nStart an alliance? (y or n)");
+		String response = scan.nextLine();
+		if(response.equalsIgnoreCase("y")) {
+			System.out.println("\nName the alliance: ");
+			String allianceName = scan.nextLine();
+			new Alliance(allianceName, true);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static void main(final String... args) { // using variable arguments because fancy
 		
@@ -55,7 +68,7 @@ public class CountrySimDriver {
 		for (int i = 0; i < countryAmount; i++) {
 			new Country(createName());
 		}
-
+		
 		Country.printCountries(true);
 
 		while (true) {
@@ -68,38 +81,9 @@ public class CountrySimDriver {
 			}
 		}
 		
-		System.out.println("\nStart an alliance? (y or n)");
-		response = scan.nextLine();
-		if (response.equalsIgnoreCase("y")) {
-			System.out.println("\nName the alliance: ");
-			String allianceName = scan.nextLine();
-			System.out.println("\nChoose countries to offer alliance (enter one name at a time; when finished, type 'done')\n");
-			Country.printCountries(true);
-			Alliance alliance  = new Alliance(allianceName);
-			while(true) {
-				boolean isMatch = false;
-				response = scan.nextLine();
-				if(response.equalsIgnoreCase("done")) {
-					break;
-				}
-				for(Country country : Country.getCountries()) {
-					if(response.equalsIgnoreCase(country.getName())) {
-						boolean acceptOffer = rand.nextBoolean();
-						isMatch = true;
-						if(acceptOffer) {
-							System.out.println(country.getName() + " accepts");
-							alliance.addCountry(country);
-						} else {
-							System.out.println(country.getName() + " refuses");
-						}
-					}
-				}
-				if(!isMatch) {
-					System.out.println("Invalid");
-				}
-			}
-			System.out.println("\n" + alliance);
-		}
+		makeAlliance();
+
+		Alliance.printAlliances();
 		/* country.assassinateLeader() - percent chance to kill
 		 * reputation
 		 * discordLevel = disagreeance in country gov style with leader
