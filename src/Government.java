@@ -4,13 +4,13 @@ public enum Government {
 		MERITOCRACY(true), DICTATORSHIP(false), MONARCHY(false), OLIGARCHY(false), PLUTOCRACY(false), 
 		REPUBLIC(true), SOCIALIST(true), THEOCRACY(false), TOTALITARIAN(false), TRIBALIST(true);
 		
-		private boolean electionsAllowed;
+		private final boolean electionsAllowed;
 		
 		private Government(boolean electionsAllowed) {
 			this.electionsAllowed = electionsAllowed;
 		}
 		
-		public boolean getElectionsAllowed() {
+		public boolean electionsAllowed() {
 			return electionsAllowed;
 		}
 		// no set needed (unless wanting to change election permission in a government style)

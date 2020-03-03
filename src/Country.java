@@ -4,7 +4,7 @@ public class Country {
 
 	public static final int VOTE_COUNT_RANGE = 100;
 	public static final Random RANDOM = new Random();
-	private static final ArrayList<Country> COUNTRIES = new ArrayList<Country>(); // stores all countries
+	private static final ArrayList<Country> countries = new ArrayList<Country>(); // stores all countries
 	private static final Government[] VALUES = Government.values();
 	private static final int SIZE = VALUES.length;
 	private static final Scanner SCANNER = new Scanner(System.in);
@@ -19,23 +19,23 @@ public class Country {
 		this.name = name;
 		leader = new Person();
 	    gov = VALUES[(RANDOM.nextInt(SIZE))];
-		COUNTRIES.add(this);
+		countries.add(this);
 	}
 
 	public static void printCountries(boolean abridge) {
 		if(abridge) {
-			for (final Country country : Country.COUNTRIES) {
+			for (final Country country : Country.countries) {
 				System.out.println(country.toString(true));
 			}
 		} else {
-			for (Country country : Country.COUNTRIES) {
+			for (Country country : Country.countries) {
 				System.out.println(country);
 			}
 		}
 	}
 
 	public static Country getCountry(int index) {
-		return Country.COUNTRIES.get(index);
+		return Country.countries.get(index);
 	}
 
 	public void setName(String name) {
@@ -68,12 +68,11 @@ public class Country {
 	}
 	
 	public static ArrayList<Country> getCountries() {
-		ArrayList<Country> temp = new ArrayList<Country>(COUNTRIES);
-		return temp;
+		return new ArrayList<Country>(countries);  // returns a copy
 	}
 	
 	public void election() {
-		if(gov.getElectionsAllowed()) {
+		if(gov.electionsAllowed()) {
 			System.out.println("Enter number of candidates in election (no more than 7): ");
 			int candidateAmount = Integer.parseInt(SCANNER.nextLine());
 			candidates = new Person[candidateAmount];
@@ -132,6 +131,7 @@ public class Country {
 		return winner;
 	}
 
+	@Override
 	public String toString() {
 		return "Country: " + name + "\n\tGovernment Type: " + gov + "\n\tLeader: " + leader + "\n";
 	}
