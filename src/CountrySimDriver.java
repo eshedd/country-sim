@@ -2,15 +2,15 @@ import java.util.*;
 
 public class CountrySimDriver {
 
-	public static Random rand = new Random();
-	public static Scanner scan = new Scanner(System.in);
+	public static Random RANDOM = new Random();
+	public static Scanner SCANNER = new Scanner(System.in);
 
 	public static String createName() {
 		String name = "";
-		final int length = rand.nextInt(5) + 2;
-		boolean vowelStart = rand.nextBoolean();
-		final boolean blendStart = rand.nextBoolean();
-		final boolean blendEnd = rand.nextBoolean();
+		final int length = RANDOM.nextInt(5) + 2;
+		boolean vowelStart = RANDOM.nextBoolean();
+		final boolean blendStart = RANDOM.nextBoolean();
+		final boolean blendEnd = RANDOM.nextBoolean();
 		final String[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu", "r", "s", "t",
 				"v", "w", "x", "y", "z", "sh", "ch", "th", "ll" };
 		final String[] vowels = { "a", "e", "i", "o", "u", "y", "a", "e", "i", "o", "u", "y", "a", "e", "i", "o", "u",
@@ -24,14 +24,14 @@ public class CountrySimDriver {
 
 		for (int i = 0; i < length; i++) {
 			if (vowelStart) {
-				name += vowels[rand.nextInt(vowels.length - 1)];
+				name += vowels[RANDOM.nextInt(vowels.length - 1)];
 			} else {
 				if (i == 0 && blendStart) {
-					name += startConBlend[rand.nextInt(startConBlend.length - 1)];
+					name += startConBlend[RANDOM.nextInt(startConBlend.length - 1)];
 				} else if (i == (length - 1) && blendEnd) {
-					name += endConBlend[rand.nextInt(endConBlend.length - 1)];
+					name += endConBlend[RANDOM.nextInt(endConBlend.length - 1)];
 				} else {
-					name += consonants[rand.nextInt(consonants.length - 1)];
+					name += consonants[RANDOM.nextInt(consonants.length - 1)];
 				}
 			}
 			vowelStart = !vowelStart;
@@ -40,13 +40,13 @@ public class CountrySimDriver {
 
 		return name;
 	}
-	
-	public static boolean makeAlliance() {
+
+	public static boolean makeAlliance(Country player) {
 		System.out.println("\nStart an alliance? (y or n)");
-		String response = scan.nextLine();
+		String response = SCANNER.nextLine();
 		if(response.equalsIgnoreCase("y")) {
 			System.out.println("\nName the alliance: ");
-			String allianceName = scan.nextLine();
+			String allianceName = SCANNER.nextLine();
 			new Alliance(allianceName, true);
 			return true;
 		} else {
@@ -54,34 +54,63 @@ public class CountrySimDriver {
 		}
 	}
 
+	public static boolean holdElection(Country player) {
+		if(player.getGov().electionsAllowed()) {
+			System.out.println("\nHold an election? (y or n)");
+			String response = SCANNER.nextLine();
+			if (response.equalsIgnoreCase("y")) {
+				player.election();
+				return true;
+			} else {  // non-yes response
+				return false;
+			}
+		} else {  // can't hold election
+			return false;
+		}
+	}
+
 	public static void main(final String... args) { // using variable arguments because fancy
-		
+
 		int countryAmount = 0;
 		String response;
-		
-		Person.createNameLists();  // grabbing all the names from the txt files and putting them in Person's static name lists
-		
+
+		Person.createNameLists();  // grabbing all the names from the txt files and putting them in Person class's static name lists
+
 		System.out.println("Welcome to CountrySim\n---------------------");
 
 		System.out.println("How many countries to generate?");
-		countryAmount = Integer.parseInt(scan.nextLine());
+		countryAmount = Integer.parseInt(SCANNER.nextLine());
 		for (int i = 0; i < countryAmount; i++) {
 			new Country(createName());
 		}
-		
+
 		Country.printCountries(true);
 
-		while (true) {
-			System.out.println("\nHold an election? (y or n)");
-			response = scan.nextLine();
-			if (response.equalsIgnoreCase("y")) {
-				Country.getCountry(0).election();
-			} else {
-				break;
+		System.out.println("Choose your country");
+		Country player = Country.getCountry(0);
+		boolean countrySelected = false;
+		while(!countrySelected) {
+			response = SCANNER.nextLine();
+			for(Country country : Country.getCountries()) {
+				if(response.equalsIgnoreCase(country.getName())) {
+					boolean acceptOffer = RANDOM.nextBoolean();
+					if(acceptOffer) {
+						System.out.println(country.getName() + " accepts!\nYour " + country);
+						player = country;
+						countrySelected = true;
+						break;
+					} else {
+						System.out.println(country.getName() + " refuses!");
+					}
+				}
 			}
 		}
-		
-		makeAlliance();
+
+
+
+		holdElection(player);
+
+		makeAlliance(player);
 
 		Alliance.printAlliances();
 		/* country.assassinateLeader() - percent chance to kill

@@ -3,7 +3,7 @@ import java.lang.Math;
 import java.util.*;
 
 public class Person {
-	private static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";  //change to only "first_names.txt" if runnning in terminal"
+	private static final String FIRST_NAMES_FILE_PATH = "src/first_names.txt";  // "first_names.txt" if terminal; "src/firstnames.txt" if eclipse
 	private static final String LAST_NAMES_FILE_PATH = "src/last_names.txt";  // same as above
 	private static final Random RANDOM = new Random();
 	private static ArrayList<String> firstNameList;
@@ -157,6 +157,10 @@ public class Person {
 	
 	public String getName() {
 		return firstName + " " + lastName;
+	}
+	
+	public String getAbbreviation() {
+		return "" + firstName.charAt(0) + lastName.charAt(0);
 	}
 
 	public String getSpectrum() {

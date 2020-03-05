@@ -26,6 +26,7 @@ public class Alliance {
 				}
 			}
 		}
+		System.out.println("");
 	}
 	
 	public boolean requestAlly(String response) {

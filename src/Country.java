@@ -68,7 +68,7 @@ public class Country {
 	}
 	
 	public static ArrayList<Country> getCountries() {
-		return new ArrayList<Country>(countries);  // returns a copy
+		return new ArrayList<Country>(Country.countries);  // returns a copy
 	}
 	
 	public void election() {
@@ -76,11 +76,10 @@ public class Country {
 			System.out.println("Enter number of candidates in election (no more than 7): ");
 			int candidateAmount = Integer.parseInt(SCANNER.nextLine());
 			candidates = new Person[candidateAmount];
-			Person winner;
 			for(int i = 0; i < candidates.length; i++) {
 				candidates[i] = new Person();
 			}
-			winner = getElectionResults(candidates);
+			Person winner = getElectionResults(candidates);
 			System.out.println("Elected: " + winner + "\n");
 		} else {
 			System.out.println("The " + gov + " government-style does not permit elections.");
@@ -99,25 +98,27 @@ public class Country {
 
 		String[] graphRows = {"\t|\n","\t|\n","\t|\n","\t|\n","\t|\n","\t|\n","\t|\n", "\t -------------------\n"};
 
-		int[] votes = new int[candidates.length];
-		int[] votePoints = new int[candidates.length];
-		String[] placeholders = {"α","β","γ","δ","ε","ζ","η"};
-		int totalVotes = 0;
+		String[] abbreviations = new String[candidates.length];  // truncated candidates names
+		int[] votes = new int[candidates.length];  // each element = total votes for each candidate
+		int[] votePoints = new int[candidates.length];  // 1 votepoint = 1 box in histogram
+		int totalVotes = 0;  // total votes for all candidates in election
 
-		for(int i = 0; i < candidates.length; i++) {
+		for(int i = 0; i < candidates.length; i++) {  // each loop-thru determines candidate's abbreviation & votes
+			abbreviations[i] = candidates[i].getAbbreviation();
 			votes[i] = RANDOM.nextInt(VOTE_COUNT_RANGE);
 			totalVotes += votes[i];
 		}
-		int maxVotes = votes[0];
-		Person winner = candidates[0];
+		
+		int maxVotes = votes[0];  // initializing highest vote count
+		Person winner = candidates[0];  // initializing highest voted for candidate
 
 		for(int i = 0; i < votes.length; i++) {
 			int votePercentage = (votes[i]*100)/totalVotes;
-			votePoints[i] = (int)Math.round((votes[i] * 20)/totalVotes);
-			graphRows[i] = placeholders[i] + "(" + votePercentage + "%)" + translateVotePoints(votePoints[i]) + "\n";
-			System.out.println(placeholders[i] + " - " + candidates[i].getName() + " (" + votePercentage + "%)");
+			votePoints[i] = (int)Math.round((votes[i] * 20)/totalVotes);  // calculate length of each candidate's histogram bar
+			graphRows[i] = abbreviations[i] + "(" + votePercentage + "%)" + translateVotePoints(votePoints[i]) + "\n";  // builds histogram bars
+			System.out.println(abbreviations[i] + " - " + candidates[i].getName() + " (" + votePercentage + "%)");  // prints legend
 
-			if(votes[i] > maxVotes) {
+			if(votes[i] > maxVotes) {  // determines highest votes and corresponding candidate
 				maxVotes = votes[i];
 				winner = candidates[i];
 			}
